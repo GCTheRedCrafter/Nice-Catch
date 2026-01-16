@@ -7,23 +7,22 @@ import hashlib
 ########
 #
 class User():
-    def __init__(self, id: str, username: str, userage: int, dogname: str, dogage: int, dogbreed: str,
-                 email: str, password: str, description: str, city: str, mainpicture: str, pictures: list):
+    def __init__(self, id: str, **kwargs):
         if id is not None:
             self.id = id
         else:
             self.id = str(uuid.uuid4())
-        self.username = username
-        self.userage = userage
-        self.dogname = dogname
-        self.dogage = dogage
-        self.dogbreed = dogbreed
-        self.email = email
-        self.password = hashlib.sha256(password.encode()).hexdigest()
-        self.description = description
-        self.city = city
-        self.mainpicture = mainpicture
-        self.pictures = pictures
+        self.username    = kwargs.get("username")
+        self.userage     = kwargs.get("userage")
+        self.dogname     = kwargs.get("dogname")
+        self.dogage      = kwargs.get("dogage", 0)
+        self.dogbreed    = kwargs.get("dogbreed")
+        self.email       = kwargs.get("email")
+        self.password    = hashlib.sha256(kwargs.get("password", '').encode()).hexdigest()
+        self.description = kwargs.get("description")
+        self.city        = kwargs.get("city")
+        self.mainpicture = kwargs.get("mainpicture")
+        self.pictures    = kwargs.get("pictures")   
     ########
     #
     def check_password(self, tocheck: str):
@@ -67,6 +66,9 @@ class User():
                 data[self.id]['city'] = self.city
                 data[self.id]['mainpicture'] = self.mainpicture
                 data[self.id]['pictures'] = self.pictures
+                json.dump(data, f, indent=3)
         except Exception as e:
             print(f'Error while loading User: {e}')
-
+#
+#
+############
